@@ -1,0 +1,59 @@
+// ==UserScript==
+// @name        Hide Codeforce Problem tag
+// @match       *://*.codeforces.com/*/*/problem/*
+// @version     0.1
+// @author      Asher
+// @noframes
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // Your code here...
+    function hideMe() {
+        for(const tag of tagsSpace.children) {
+            if(tag.tagName.toLowerCase() !== 'button') { //dont hide our button
+                tag.style.display = 'none';
+            }
+        }
+        unhideButton.innerHTML = 'Unhide Tags'
+    }
+
+    function unhideMe() {
+        for(const tag of tagsSpace.children) {
+            tag.style.display = '';
+        }
+        unhideButton.innerHTML = 'Hide Tags'
+    }
+
+    const problemTagsText = "Problem tags";
+    let isHidden = true;
+
+    // This selects tags space. Hope this selector never changes.
+    let allSpace = document.querySelectorAll('#sidebar > div > div.caption.titled');
+    let testSpace = null;
+    allSpace.forEach((ele) => {
+        if(ele.textContent.includes(problemTagsText)) {
+            testSpace = ele;
+        }
+    });
+
+
+    let tagsSpace = testSpace.parentNode.querySelector('div:nth-child(2)');
+
+    // Adding a button unhide tags
+    const unhideButton = document.createElement('button');
+    unhideButton.innerHTML = 'Unhide Tags';
+    unhideButton.addEventListener('click', () => {
+        if(isHidden) {
+            unhideMe();
+        } else {
+           hideMe();
+        }
+
+        isHidden = !isHidden;
+    });
+
+    hideMe();
+    tagsSpace.appendChild(unhideButton);
+})();
