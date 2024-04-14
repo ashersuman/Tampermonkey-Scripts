@@ -1,0 +1,61 @@
+// ==UserScript==
+// @name         Count Easy,Medium,Hard on Leetcode
+// @namespace    http://tampermonkey.net/
+// @version      2024-04-14
+// @description  try to take over the world!
+// @author       Asher
+// @match        https://leetcode.com/company/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=leetcode.com
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+    window.addEventListener("load", function() {countQuestions()});
+
+    function isContentPresent() {
+        return document.querySelectorAll('.label').length > 0;
+    }
+
+    function isSolved(e) {
+       return (e.parentElement.parentElement.cells[0].getAttribute('value') == 'ac');
+    }
+
+    function countQuestions() {
+        if(!isContentPresent()) {
+            setTimeout(countQuestions, 1000);
+       } else {
+            var injectNode = document.querySelector(".table-responsive");
+            var firstChild = injectNode.firstChild;
+            var responseElement = document.createElement('p');
+
+            var labels = document.querySelectorAll(".label");
+            var accepted = labels.parentNode;
+
+            let mediumCount=0, easyCount=0, hardCount=0;
+            let solvedMedium=0, solvedEasy=0, solvedHard=0;
+
+           labels.forEach((e) => {
+                if(e.innerHTML == 'Easy') {
+                    easyCount++;
+                    if(isSolved(e)) solvedEasy++;
+                }
+                else if(e.innerHTML == 'Medium') {
+                    mediumCount++;
+                    if(isSolved(e)) solvedMedium++;
+                }
+                else if(e.innerHTML == 'Hard') {
+                    hardCount++;
+                    if(isSolved(e)) solvedHard++;
+                }
+            });
+
+            responseElement.textContent = `Easy : ${easyCount} | solved: ${solvedEasy}, Medium: ${mediumCount} | solved: ${solvedMedium} , Hard: ${hardCount} | solved: ${solvedHard}`;
+            responseElement.style.fontWeight = '700';
+            responseElement.style.textAlign = 'center';
+            responseElement.style.background = '#D1FFBD';
+            injectNode.insertBefore(responseElement, firstChild);
+        }
+    }
+    // Your code here...
+})();
