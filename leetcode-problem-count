@@ -5,6 +5,7 @@
 // @description  try to take over the world!
 // @author       Asher
 // @match        https://leetcode.com/company/*
+// @match        https://leetcode.com/tag/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=leetcode.com
 // @grant        none
 // ==/UserScript==
